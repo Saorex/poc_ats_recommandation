@@ -4,6 +4,7 @@ from nltk.corpus import stopwords
 import nltk
 
 nltk.download('punkt')
+nltk.download('punkt_tab')
 nltk.download('stopwords')
 
 SYNONYM_GROUPS = [

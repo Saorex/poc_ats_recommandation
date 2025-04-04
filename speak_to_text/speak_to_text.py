@@ -37,6 +37,6 @@ def transcrire_audio():
 
     # Affichage des résultats
     print("Texte transcrit:", result["text"])
-    print(f"Temps de réponse: {end_time - start_time:.2f} secondes")
+    print(f"Temps de réponse speach to text: {end_time - start_time:.2f} secondes")
     
     return result["text"]
