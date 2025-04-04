@@ -1,40 +1,21 @@
-import whisper
-import torch
-import time
-import sounddevice as sd
-import numpy as np
-import wave
+from speak_to_text.speak_to_text import transcrire_audio
+from recommandation.recommandation import charger_donnees, extraire_mots_cles, trouver_videos
 
-# Paramètres d'enregistrement
-SAMPLE_RATE = 16000  # Taux d'échantillonnage
-DURATION = 5  # Durée d'enregistrement en secondes
-OUTPUT_FILE = "live_audio.wav"
+def main():
+    print("Chargement des données...")
+    donnees = charger_donnees()
+    keywords_df = extraire_mots_cles(donnees)
 
-def record_audio(filename, duration, sample_rate):
-    print("Enregistrement en cours...")
-    audio = sd.rec(int(duration * sample_rate), samplerate=sample_rate, channels=1, dtype=np.int16)
-    sd.wait()  # Attendre la fin de l'enregistrement
-    print("Enregistrement terminé.")
+    print("Veuillez poser une question après l'enregistrement.")
+    question = transcrire_audio()
 
-    # Sauvegarde au format WAV
-    with wave.open(filename, "wb") as wf:
-        wf.setnchannels(1)
-        wf.setsampwidth(2)  # 16-bit PCM
-        wf.setframerate(sample_rate)
-        wf.writeframes(audio.tobytes())
+    print(f"Résultats pour : '{question}'")
+    resultats = trouver_videos(question, keywords_df)
 
-# Charger le modèle Whisper
-print("Chargement du modèle...")
-model = whisper.load_model("small")
+    for res in resultats:
+        print(f"[VIDÉO {res['ID_video']}] {res['Titre']}")
+        print(f"Culture: {res['Culture']} | Score: {res['Score']}")
+        print(f"Mots-clés: {', '.join(res['Mots_cles_communs'])}\n")
 
-# Capture de l'audio
-record_audio(OUTPUT_FILE, DURATION, SAMPLE_RATE)
-
-# Transcription avec mesure du temps
-start_time = time.time()
-result = model.transcribe(OUTPUT_FILE)
-end_time = time.time()
-
-# Affichage des résultats
-print("Texte transcrit:", result["text"])
-print(f"Temps de réponse: {end_time - start_time:.2f} secondes")
+if __name__ == "__main__":
+    main()
