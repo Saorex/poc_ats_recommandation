@@ -1,4 +1,5 @@
 import pandas as pd
+import time
 from rake_nltk import Rake
 from nltk.corpus import stopwords
 import nltk
@@ -100,6 +101,7 @@ def trouver_videos(question, keywords_df):
     Retourne:
         list : Une liste triée de résultats contenant les vidéos les plus pertinentes.
     """
+    start_time = time.time()
     rake = configurer_rake()
     rake.extract_keywords_from_text(question.lower())
     question_keywords = rake.get_ranked_phrases()[:5]
@@ -130,6 +132,8 @@ def trouver_videos(question, keywords_df):
                 'Mots_cles_communs': list(mots_communs)
             })
     
+    end_time = time.time()
+    print(f"Temps de recherche recommandation: {end_time - start_time:.2f} secondes")
     return sorted(resultats, key=lambda x: x['Score'], reverse=True)[:3]
 
 '''donnees = charger_donnees()
