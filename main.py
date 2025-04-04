@@ -5,6 +5,7 @@ import sounddevice as sd
 import numpy as np
 import wave
 
+
 # Paramètres d'enregistrement
 SAMPLE_RATE = 16000  # Taux d'échantillonnage
 DURATION = 5  # Durée d'enregistrement en secondes
