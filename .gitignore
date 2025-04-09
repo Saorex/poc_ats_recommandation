@@ -1,6 +1,8 @@
 live_audio.wav
+*.ogg
 *.wav
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
+data/

@@ -1,5 +1,6 @@
 from speak_to_text.speak_to_text import transcrire_audio
 from recommandation.recommandation import charger_donnees, extraire_mots_cles, trouver_videos
+from tts.tts import text_to_speech 
 
 def main():
     print("Chargement des données...")
@@ -8,6 +9,9 @@ def main():
 
     print("Veuillez poser une question après l'enregistrement.")
     question = transcrire_audio()
+
+    print(f"Question posée : {question}")
+    text_to_speech(question, "output.ogg")
 
     print(f"Résultats pour : '{question}'")
     resultats = trouver_videos(question, keywords_df)
